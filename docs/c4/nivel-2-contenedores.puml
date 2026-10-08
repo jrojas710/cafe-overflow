@@ -1,0 +1,22 @@
+@startuml nivel-2-contenedores
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Nivel 2 · Diagrama de Contenedores — Café Overflow
+
+Person(cliente, "Cliente desarrollador", "Hace y paga pedidos; consulta su lealtad.")
+Person(barista, "Barista / Personal", "Gestiona la barra y el inventario.")
+
+System_Boundary(cafe, "Café Overflow") {
+  Container(spa, "Aplicación web (SPA)", "HTML5, CSS3, JavaScript ES Modules (navegador)", "Tier 1. Cliente liviano: renderiza vistas y valida sintaxis; los cálculos los pide a la API.")
+  Container(api, "Servidor de aplicación / API REST", "Node.js 22 + node:http, sin frameworks", "Tier 2. API JSON + archivos estáticos. Capas lógicas: Presentación → Negocio → Persistencia.")
+  ContainerDb(datos, "Almacén de datos", "Archivos JSON en disco", "Tier 3. productos.json, clientes.json, pedidos.json (creados desde semillas).")
+}
+
+Rel(cliente, spa, "Usa", "HTTPS")
+Rel(barista, spa, "Usa", "HTTPS")
+Rel(spa, api, "Llama a la API (cotizar, registrar, avanzar…)", "JSON / HTTP · fetch")
+Rel_Back(spa, api, "Entrega HTML, CSS y JS", "HTTP")
+Rel(api, datos, "Lee y escribe registros", "fs/promises · escritura atómica")
+
+SHOW_LEGEND()
+@enduml

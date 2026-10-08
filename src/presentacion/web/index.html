@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Café Overflow — Dev &amp; Coffee Lounge</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2317120e'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e0a458' font-family='monospace'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/css/estilos.css">
+  <script type="module" src="/js/app.js"></script>
+</head>
+<body>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="marca__logo" aria-hidden="true">{&thinsp;}</span>
+      <div>
+        <h1 class="marca__nombre">Café Overflow</h1>
+        <p class="marca__lema">Dev &amp; Coffee Lounge</p>
+      </div>
+    </div>
+
+    <div class="sesion">
+      <label class="sesion__etiqueta" for="selector-cliente">Cliente</label>
+      <select id="selector-cliente" class="campo campo--select"></select>
+      <button id="btn-nuevo-cliente" class="btn btn--fantasma" type="button">+ Nuevo cliente</button>
+    </div>
+  </header>
+
+  <section id="tarjeta-lealtad" class="lealtad" aria-live="polite"></section>
+
+  <nav class="pestanas" role="tablist" aria-label="Secciones">
+    <button class="pestana" role="tab" data-pestana="menu" aria-selected="true">Menú</button>
+    <button class="pestana" role="tab" data-pestana="mis-pedidos" aria-selected="false">Mis pedidos</button>
+    <button class="pestana" role="tab" data-pestana="barra" aria-selected="false">Barra <span class="pestana__staff">staff</span></button>
+    <button class="pestana" role="tab" data-pestana="inventario" aria-selected="false">Inventario <span class="pestana__staff">staff</span></button>
+  </nav>
+
+  <main class="contenido">
+    <!-- ─────────────── MENÚ + CARRITO ─────────────── -->
+    <section class="panel" data-panel="menu" role="tabpanel">
+      <div class="menu">
+        <div>
+          <h2 class="titulo-seccion"><span class="comentario">//</span> Menú del día</h2>
+          <div id="lista-productos" class="productos"></div>
+        </div>
+
+        <aside class="carrito" aria-labelledby="titulo-carrito">
+          <h2 id="titulo-carrito" class="carrito__titulo">Tu pedido</h2>
+          <ul id="carrito-lineas" class="carrito__lineas"></ul>
+
+          <div class="carrito__puntos">
+            <label for="devpoints-redimir">Redimir DevPoints</label>
+            <div class="carrito__puntos-fila">
+              <input id="devpoints-redimir" class="campo campo--numero" type="number" min="0" step="1" value="0" inputmode="numeric">
+              <button id="btn-usar-todos" class="btn btn--fantasma btn--chico" type="button">Usar todos</button>
+            </div>
+            <p id="devpoints-ayuda" class="ayuda"></p>
+          </div>
+
+          <dl id="carrito-resumen" class="resumen"></dl>
+          <p id="carrito-mensaje" class="mensaje" role="status"></p>
+          <button id="btn-confirmar" class="btn btn--primario btn--bloque" type="button" disabled>Confirmar pedido</button>
+          <p class="nota">Los totales, descuentos y DevPoints los calcula el servidor (capa de negocio).</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─────────────── MIS PEDIDOS ─────────────── -->
+    <section class="panel" data-panel="mis-pedidos" role="tabpanel" hidden>
+      <h2 class="titulo-seccion"><span class="comentario">//</span> Mis pedidos</h2>
+      <div id="lista-mis-pedidos" class="pedidos"></div>
+    </section>
+
+    <!-- ─────────────── BARRA (STAFF) ─────────────── -->
+    <section class="panel" data-panel="barra" role="tabpanel" hidden>
+      <div class="titulo-con-accion">
+        <h2 class="titulo-seccion"><span class="comentario">//</span> Barra — flujo de pedidos</h2>
+        <span class="nota">Se actualiza cada 5 s. Al marcar <strong>Entregado</strong> la compra se considera completada.</span>
+      </div>
+      <div id="tablero-barra" class="tablero"></div>
+    </section>
+
+    <!-- ─────────────── INVENTARIO (STAFF) ─────────────── -->
+    <section class="panel" data-panel="inventario" role="tabpanel" hidden>
+      <h2 class="titulo-seccion"><span class="comentario">//</span> Inventario</h2>
+      <div class="inventario">
+        <div class="tabla-envoltura">
+          <table class="tabla">
+            <thead><tr><th>#</th><th>Producto</th><th class="num">Precio base</th><th>Stock</th></tr></thead>
+            <tbody id="tabla-inventario"></tbody>
+          </table>
+        </div>
+
+        <form id="form-producto" class="tarjeta formulario" novalidate>
+          <h3>Nuevo producto</h3>
+          <label>Nombre<input class="campo" name="nombre" maxlength="80" placeholder="Mocha Merge Request"></label>
+          <label>Precio base (COP)<input class="campo" name="precio" type="number" min="1" step="1" placeholder="11000"></label>
+          <label>Stock inicial<input class="campo" name="stock" type="number" min="0" step="1" placeholder="20"></label>
+          <p class="mensaje" data-mensaje></p>
+          <button class="btn btn--primario" type="submit">Agregar al menú</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dialogo-cliente" class="dialogo">
+    <form id="form-cliente" method="dialog" class="formulario" novalidate>
+      <h3>Registrar cliente</h3>
+      <p class="nota">Todo cliente nuevo inicia como <strong>Junior</strong> con $0 acumulado.</p>
+      <label>Nombre<input class="campo" name="nombre" maxlength="80" autocomplete="name" placeholder="Alan Turing"></label>
+      <label>Correo electrónico<input class="campo" name="correo" type="email" maxlength="160" autocomplete="email" placeholder="alan@ejemplo.dev"></label>
+      <p class="mensaje" data-mensaje></p>
+      <div class="dialogo__acciones">
+        <button class="btn btn--fantasma" type="button" data-cerrar>Cancelar</button>
+        <button class="btn btn--primario" type="submit">Registrar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="avisos" class="avisos" aria-live="polite"></div>
+</body>
+</html>

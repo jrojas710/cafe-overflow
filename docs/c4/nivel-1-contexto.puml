@@ -1,0 +1,15 @@
+@startuml nivel-1-contexto
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Nivel 1 · Diagrama de Contexto — Café Overflow
+
+Person(cliente, "Cliente desarrollador", "Desarrollador que visita el café. Pide desde su mesa o para llevar, paga y acumula DevPoints.")
+Person(barista, "Barista / Personal", "Registra pagos en barra, prepara y entrega pedidos y mantiene el inventario.")
+
+System(cafe, "Café Overflow", "Gestiona el menú, procesa pedidos, calcula descuentos por nivel (Junior/Mid/Senior) y administra el programa de lealtad DevPoints.")
+
+Rel(cliente, cafe, "Consulta el menú, cotiza, registra y paga pedidos; consulta su nivel y DevPoints", "HTTPS / navegador")
+Rel(barista, cafe, "Avanza el estado de los pedidos y actualiza el stock", "HTTPS / navegador")
+
+SHOW_LEGEND()
+@enduml

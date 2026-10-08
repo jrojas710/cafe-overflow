@@ -1,0 +1,9 @@
+{
+  "secuencia": 4,
+  "registros": [
+    { "id": 1, "nombre": "Ada Lovelace", "correo": "ada@cafeoverflow.dev", "nivel": "JUNIOR", "devPoints": 4, "montoAcumulado": 85000, "fechaRegistro": "2026-08-03T14:10:00.000Z" },
+    { "id": 2, "nombre": "Margaret Hamilton", "correo": "margaret@cafeoverflow.dev", "nivel": "JUNIOR", "devPoints": 23, "montoAcumulado": 480000, "fechaRegistro": "2026-07-21T15:30:00.000Z" },
+    { "id": 3, "nombre": "Linus Torvalds", "correo": "linus@cafeoverflow.dev", "nivel": "MID", "devPoints": 31, "montoAcumulado": 640000, "fechaRegistro": "2026-06-12T13:00:00.000Z" },
+    { "id": 4, "nombre": "Grace Hopper", "correo": "grace@cafeoverflow.dev", "nivel": "SENIOR", "devPoints": 85, "montoAcumulado": 1720000, "fechaRegistro": "2026-05-02T12:45:00.000Z" }
+  ]
+}

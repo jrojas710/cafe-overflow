@@ -1,0 +1,60 @@
+@startuml nivel-3-componentes
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Nivel 3 · Diagrama de Componentes — Servidor de aplicación / API REST
+
+Container(spa, "Aplicación web (SPA)", "HTML/CSS/JS", "Cliente liviano que consume la API.")
+ContainerDb(datos, "Almacén de datos", "Archivos JSON")
+
+Container_Boundary(api, "Servidor de aplicación / API REST (Node.js)") {
+
+  Boundary(presentacion, "Capa de Presentación — src/presentacion") {
+    Component(http, "Servidor HTTP + Enrutador", "node:http", "Separa /api de estáticos, resuelve rutas, lee JSON y traduce errores a códigos HTTP.")
+    Component(estaticos, "Servidor de estáticos", "node:fs", "Entrega index.html, CSS y JS. Bloquea path traversal.")
+    Component(ctrlProd, "ControladorProductos", "Módulo JS", "GET/POST /api/productos, PATCH stock.")
+    Component(ctrlCli, "ControladorClientes", "Módulo JS", "GET/POST /api/clientes, perfil de lealtad.")
+    Component(ctrlPed, "ControladorPedidos", "Módulo JS", "Cotizar, registrar, listar y avanzar pedidos.")
+    Component(validacion, "Validación sintáctica", "Módulo JS", "Requeridos, tipos y formato de correo.")
+  }
+
+  Boundary(negocio, "Capa de Negocio (Core) — src/negocio") {
+    Component(srvProd, "ProductoServicio", "Caso de uso", "Menú, alta de productos y ajuste de stock.")
+    Component(srvCli, "ClienteServicio", "Caso de uso", "Registro (inicia Junior), correo único y perfil de lealtad.")
+    Component(srvPed, "PedidoServicio", "Caso de uso", "Valida stock y pendientes, aplica descuentos, redime y otorga DevPoints.")
+    Component(politicas, "Políticas de negocio", "Funciones puras", "Descuento por nivel, ascenso de lealtad, DevPoints y calculadora de totales.")
+    Component(entidades, "Entidades de dominio", "Clases JS", "Producto, Cliente y Pedido (máquina de estados).")
+  }
+
+  Boundary(persistencia, "Capa de Persistencia — src/persistencia") {
+    Component(repoProd, "ProductoRepositorioJson", "Repository / DAO", "Consulta y guarda productos.")
+    Component(repoCli, "ClienteRepositorioJson", "Repository / DAO", "Consulta, busca por correo y guarda clientes.")
+    Component(repoPed, "PedidoRepositorioJson", "Repository / DAO", "Consulta con filtros y guarda pedidos.")
+    Component(almacen, "AlmacenJson", "Módulo JS", "Caché en memoria, ids autoincrementales y escritura atómica.")
+  }
+}
+
+Rel(spa, http, "Peticiones /api/* y archivos", "JSON / HTTP")
+Rel(http, estaticos, "Delega rutas no /api")
+Rel(http, ctrlProd, "Enruta")
+Rel(http, ctrlCli, "Enruta")
+Rel(http, ctrlPed, "Enruta")
+Rel(ctrlPed, validacion, "Valida")
+Rel(ctrlProd, srvProd, "Invoca casos de uso")
+Rel(ctrlCli, srvCli, "Invoca casos de uso")
+Rel(ctrlPed, srvPed, "Invoca casos de uso")
+Rel(srvPed, politicas, "Calcula")
+Rel(srvCli, politicas, "Consulta progreso")
+Rel(srvPed, entidades, "Crea y modifica")
+Rel(srvProd, repoProd, "Lee y guarda (contrato inyectado)")
+Rel(srvCli, repoCli, "Lee y guarda")
+Rel(srvCli, repoPed, "¿Pedido pendiente?")
+Rel(srvPed, repoPed, "Lee y guarda")
+Rel(srvPed, repoProd, "Stock")
+Rel(srvPed, repoCli, "Puntos / nivel")
+Rel(repoProd, almacen, "Usa")
+Rel(repoCli, almacen, "Usa")
+Rel(repoPed, almacen, "Usa")
+Rel(almacen, datos, "Lee / escribe", "fs/promises")
+
+SHOW_LEGEND()
+@enduml

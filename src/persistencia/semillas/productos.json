@@ -1,0 +1,18 @@
+{
+  "secuencia": 13,
+  "registros": [
+    { "id": 1, "nombre": "Espresso StackTrace", "precio": 6500, "stock": 40 },
+    { "id": 2, "nombre": "Americano Hello World", "precio": 7000, "stock": 35 },
+    { "id": 3, "nombre": "Latte Lambda", "precio": 9500, "stock": 30 },
+    { "id": 4, "nombre": "Cappuccino Callback", "precio": 10000, "stock": 25 },
+    { "id": 5, "nombre": "Té Async/Await", "precio": 8000, "stock": 20 },
+    { "id": 6, "nombre": "Cold Brew Kubernetes", "precio": 12500, "stock": 15 },
+    { "id": 7, "nombre": "Frappé Full-Stack", "precio": 14000, "stock": 12 },
+    { "id": 8, "nombre": "Brownie 404 Not Found", "precio": 7500, "stock": 18 },
+    { "id": 9, "nombre": "Croissant NullPointer", "precio": 6000, "stock": 20 },
+    { "id": 10, "nombre": "Sándwich Segfault", "precio": 16500, "stock": 10 },
+    { "id": 11, "nombre": "Combo BugHunter", "precio": 28000, "stock": 8 },
+    { "id": 12, "nombre": "Combo Pair Programming", "precio": 45000, "stock": 6 },
+    { "id": 13, "nombre": "Combo Hackathon Nocturno", "precio": 120000, "stock": 4 }
+  ]
+}
